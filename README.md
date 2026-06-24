@@ -9,4 +9,4 @@
 
 **Please let me know if you have any question, such as language, dll configuration,  email at: ma_sx@foxmail.com**
 
-Because of file-size limitaion, Shixing did not upload .dll files.
+Because of file-size limitaion, Shixing (me) did not upload .dll files.
