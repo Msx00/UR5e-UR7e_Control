@@ -1,0 +1,616 @@
+﻿<Window x:Class="WpfRobot.calibrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WpfRobot"
+        Title="器械标定"
+        Width="1400"
+        Height="900"
+        WindowStartupLocation="CenterOwner"
+        Background="#000000">
+
+    <Window.Resources>
+
+        <!-- ========================= -->
+        <!-- 圆角按钮基础样式 -->
+        <!-- ========================= -->
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                SnapsToDevicePixels="True">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EFF6FF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#60A5FA"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#DBEAFE"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#2563EB"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#94A3B8"/>
+                                <Setter TargetName="border" Property="Background" Value="#F1F5F9"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#E2E8F0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <!-- ========================= -->
+        <!-- 顶部主按钮 -->
+        <!-- ========================= -->
+        <Style x:Key="PrimaryButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource RoundButtonStyle}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="BorderBrush" Value="#2563EB"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1D4ED8"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#1D4ED8"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1E40AF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#1E40AF"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#CBD5E1"/>
+                                <Setter TargetName="border" Property="Background" Value="#94A3B8"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#94A3B8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <!-- ========================= -->
+        <!-- 左侧导航按钮 -->
+        <!-- ========================= -->
+        <Style x:Key="CalibrationNavButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource RoundButtonStyle}">
+
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Margin" Value="0,5"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="12">
+
+                            <ContentPresenter HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"
+                                              Margin="12,0,8,0"
+                                              RecognizesAccessKey="True"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EFF6FF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#93C5FD"/>
+                                <Setter Property="Foreground" Value="#1D4ED8"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#DBEAFE"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#2563EB"/>
+                                <Setter Property="Foreground" Value="#1E40AF"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#94A3B8"/>
+                                <Setter TargetName="border" Property="Background" Value="#F1F5F9"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#E2E8F0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+        <!-- ========================= -->
+        <!-- 小按钮样式 -->
+        <!-- ========================= -->
+        <Style x:Key="SmallRoundButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource RoundButtonStyle}">
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="MinWidth" Value="78"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+
+        <!-- ========================= -->
+        <!-- 卡片标题样式 -->
+        <!-- ========================= -->
+        <Style x:Key="CardTitleTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#1E293B"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+
+        <!-- ========================= -->
+        <!-- 普通说明文字 -->
+        <!-- ========================= -->
+        <Style x:Key="HintTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+    </Window.Resources>
+
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="150"/>
+        </Grid.RowDefinitions>
+
+
+        <!-- ===================================================== -->
+        <!-- 顶部标题栏 -->
+        <!-- ===================================================== -->
+        <Border Grid.Row="0"
+                Background="Black"
+                CornerRadius="14"
+                Padding="16,8"
+                BorderThickness="6"
+                BorderBrush="White">
+            
+            <DockPanel LastChildFill="True">
+                <!--<DockPanel LastChildFill="True" HorizontalAlignment="Right" Width="1346">-->
+
+                    <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center">
+
+                    <TextBlock Text="器械标定"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="White"/>
+
+                    <!--<TextBlock Text="内窥镜、机械臂、第七轴、工具、NDI、激光发射点统一标定入口"
+                               FontSize="12"
+                               Foreground="White"
+                               Margin="0,2,0,0"/>-->
+                </StackPanel>
+
+
+                <StackPanel DockPanel.Dock="Right"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+
+                    <Button x:Name="BtnLoadCalibrationParams"
+                            Content="加载标定参数"
+                            Width="122"
+                            Style="{StaticResource RoundButtonStyle}"
+                            Click="BtnLoadCalibrationParams_Click"/>
+
+                    <Button x:Name="BtnSaveAllCalibrationParams"
+                            Content="保存全部参数"
+                            Width="122"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Click="BtnSaveAllCalibrationParams_Click"/>
+                </StackPanel>
+
+            </DockPanel>
+        </Border>
+
+
+        <!-- ===================================================== -->
+        <!-- 中间主体区域 -->
+        <!-- ===================================================== -->
+        <Grid Grid.Row="1"
+              Margin="0,10,0,10">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="255"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- ================================================= -->
+            <!-- 左侧导航栏 -->
+            <!-- ================================================= -->
+            <Border Grid.Column="0"
+                    Background="White"
+                    CornerRadius="14"
+                    BorderBrush="#D8E0EA"
+                    BorderThickness="1"
+                    Padding="12">
+
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+
+                    <StackPanel Grid.Row="0">
+
+                        <TextBlock Text="标定任务"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="#1E293B"
+                                   Margin="4,4,0,12"/>
+                        <Button x:Name="BtnCalibrationGuide"
+                                Content="标定导览"
+                                Style="{StaticResource CalibrationNavButtonStyle}"
+                                Click="BtnCalibrationGuide_Click"/>
+                        <Button x:Name="BtnEndoIntrinsic"
+                                Content="① 单目内窥镜内参标定"
+                                Style="{StaticResource CalibrationNavButtonStyle}"
+                                Click="BtnEndoIntrinsic_Click"/>
+
+                        <Button x:Name="BtnEndoHandEye"
+                                Content="② 内窥镜-机械臂手眼标定"
+                                Style="{StaticResource CalibrationNavButtonStyle}"
+                                Click="BtnEndoHandEye_Click"/>
+
+                        <Button x:Name="BtnMotor7Zero"
+                                Content="③ 第七电机零点标定"
+                                Style="{StaticResource CalibrationNavButtonStyle}"
+                                Click="BtnMotor7Zero_Click"/>
+
+                        <Button x:Name="BtnToolLength"
+                                Content="④ 手术工具长度标定"
+                                Style="{StaticResource CalibrationNavButtonStyle}"
+                                Click="BtnToolLength_Click"/>
+
+                        <Button x:Name="BtnNdiRobot"
+                                Content="⑤ NDI-机械臂手眼标定"
+                                Style="{StaticResource CalibrationNavButtonStyle}"
+                                Click="BtnNdiRobot_Click"/>
+
+                        <Button x:Name="BtnLaserPoint"
+                                Content="⑥ 激光发射点标定"
+                                Style="{StaticResource CalibrationNavButtonStyle}"
+                                Click="BtnLaserPoint_Click"/>
+
+                    </StackPanel>
+
+
+                    <!-- 当前状态 -->
+                    <Border Grid.Row="2"
+                            Background="#F8FAFC"
+                            BorderBrush="#E2E8F0"
+                            BorderThickness="1"
+                            CornerRadius="12"
+                            Padding="10"
+                            Margin="0,12,0,0">
+
+                        <StackPanel>
+                            <TextBlock Text="当前状态"
+                                       FontWeight="Bold"
+                                       FontSize="14"
+                                       Foreground="#334155"
+                                       Margin="0,0,0,6"/>
+
+                            <TextBlock x:Name="TxtCalibrationStatus"
+                                       Text="未选择标定任务"
+                                       Foreground="#64748B"
+                                       FontSize="13"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+                    </Border>
+
+                </Grid>
+            </Border>
+
+
+            <!-- ================================================= -->
+            <!-- 右侧标定工作区 -->
+            <!-- ================================================= -->
+            <Border Grid.Column="1"
+                    Background="White"
+                    CornerRadius="14"
+                    BorderBrush="#D8E0EA"
+                    BorderThickness="1"
+                    Padding="14"
+                    Margin="10,0,0,0">
+
+                <ContentControl x:Name="CalibrationContent">
+                    <!-- 默认欢迎界面 -->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0"
+                                        Margin="4">
+
+                                <TextBlock Text="👈请选择标定任务"
+                                           FontSize="24"
+                                           FontWeight="Bold"
+                                           Foreground="#0F172A"/>
+
+                                <TextBlock Text="该页面用于完成内窥镜、机器人、第七轴、手术工具、NDI追踪器以及激光发射点的统一标定。"
+                                           FontSize="14"
+                                           Foreground="#64748B"
+                                           Margin="0,6,0,16"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+
+
+                            <UniformGrid Grid.Row="1"
+                                         Columns="2"
+                                         Margin="0,8,0,0">
+
+                                <!-- 卡片1 -->
+                                <Border Background="#F8FAFC"
+                                        BorderBrush="#E2E8F0"
+                                        BorderThickness="1"
+                                        CornerRadius="14"
+                                        Padding="16"
+                                        Margin="6">
+
+                                    <StackPanel>
+                                        <TextBlock Text="① 单目内窥镜内参标定"
+                                                   Style="{StaticResource CardTitleTextStyle}"/>
+
+                                        <TextBlock Text="支持相机实时画面显示、棋盘格或标定板图像采集、内参求解、畸变参数保存。"
+                                                   Style="{StaticResource HintTextStyle}"/>
+
+                                        <TextBlock Text="输出：fx, fy, cx, cy, k1, k2, p1, p2, k3"
+                                                   Foreground="#475569"
+                                                   FontSize="13"
+                                                   Margin="0,10,0,0"
+                                                   TextWrapping="Wrap"/>
+                                    </StackPanel>
+                                </Border>
+
+
+                                <!-- 卡片2 -->
+                                <Border Background="#F8FAFC"
+                                        BorderBrush="#E2E8F0"
+                                        BorderThickness="1"
+                                        CornerRadius="14"
+                                        Padding="16"
+                                        Margin="6">
+
+                                    <StackPanel>
+                                        <TextBlock Text="② 内窥镜-机械臂手眼标定"
+                                                   Style="{StaticResource CardTitleTextStyle}"/>
+
+                                        <TextBlock Text="采集机器人末端位姿与内窥镜观测标定板位姿，求解相机相对于机械臂末端或第七轴的安装关系。"
+                                                   Style="{StaticResource HintTextStyle}"/>
+
+                                        <TextBlock Text="输出：T_7_camera"
+                                                   Foreground="#475569"
+                                                   FontSize="13"
+                                                   Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+
+                                <!-- 卡片3 -->
+                                <Border Background="#F8FAFC"
+                                        BorderBrush="#E2E8F0"
+                                        BorderThickness="1"
+                                        CornerRadius="14"
+                                        Padding="16"
+                                        Margin="6">
+
+                                    <StackPanel>
+                                        <TextBlock Text="③ 第七电机零点标定"
+                                                   Style="{StaticResource CardTitleTextStyle}"/>
+
+                                        <TextBlock Text="读取第七电机当前编码器角度，设置当前位置为机械零点，并保存零点偏移量。"
+                                                   Style="{StaticResource HintTextStyle}"/>
+
+                                        <TextBlock Text="输出：q7_zero_offset"
+                                                   Foreground="#475569"
+                                                   FontSize="13"
+                                                   Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+
+                                <!-- 卡片4 -->
+                                <Border Background="#F8FAFC"
+                                        BorderBrush="#E2E8F0"
+                                        BorderThickness="1"
+                                        CornerRadius="14"
+                                        Padding="16"
+                                        Margin="6">
+
+                                    <StackPanel>
+                                        <TextBlock Text="④ 手术工具长度标定"
+                                                   Style="{StaticResource CardTitleTextStyle}"/>
+
+                                        <TextBlock Text="用于标定第七电机转轴上安装的手术工具长度，解决每次安装后工具末端长度略有变化的问题。"
+                                                   Style="{StaticResource HintTextStyle}"/>
+
+                                        <TextBlock Text="输出：Tool_X, Tool_Y, Tool_Z"
+                                                   Foreground="#475569"
+                                                   FontSize="13"
+                                                   Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+
+                                <!-- 卡片5 -->
+                                <Border Background="#F8FAFC"
+                                        BorderBrush="#E2E8F0"
+                                        BorderThickness="1"
+                                        CornerRadius="14"
+                                        Padding="16"
+                                        Margin="6">
+
+                                    <StackPanel>
+                                        <TextBlock Text="⑤ NDI-机械臂手眼标定"
+                                                   Style="{StaticResource CardTitleTextStyle}"/>
+
+                                        <TextBlock Text="采集机器人位姿和安装在机械臂上的光学追踪标记位姿，求解机器人基坐标系与NDI标记坐标系之间的关系。"
+                                                   Style="{StaticResource HintTextStyle}"/>
+
+                                        <TextBlock Text="输出：T_base_marker 或者 T_ndi_base"
+                                                   Foreground="#475569"
+                                                   FontSize="13"
+                                                   Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+
+                                <!-- 卡片6 -->
+                                <Border Background="#F8FAFC"
+                                        BorderBrush="#E2E8F0"
+                                        BorderThickness="1"
+                                        CornerRadius="14"
+                                        Padding="16"
+                                        Margin="6">
+
+                                    <StackPanel>
+                                        <TextBlock Text="⑥ 激光发射点标定"
+                                                   Style="{StaticResource CardTitleTextStyle}"/>
+
+                                        <TextBlock Text="用于标定激光发射点相对于工具坐标系或第七轴坐标系的位置，也可扩展为激光方向标定。"
+                                                   Style="{StaticResource HintTextStyle}"/>
+
+                                        <TextBlock Text="输出：T_tool_laser 或 p_laser_in_tool"
+                                                   Foreground="#475569"
+                                                   FontSize="13"
+                                                   Margin="0,10,0,0"/>
+                                    </StackPanel>
+                                </Border>
+
+                            </UniformGrid>
+                        </Grid>
+                    </ScrollViewer>
+                </ContentControl>
+                
+            </Border>
+
+        </Grid>
+
+
+        <!-- ===================================================== -->
+        <!-- 底部日志区 -->
+        <!-- ===================================================== -->
+        <Border Grid.Row="2"
+                Background="#FFFFFF"
+                CornerRadius="14"
+                Padding="10">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0" Grid.RowSpan="2">
+
+                    <StackPanel Orientation="Horizontal"
+                                VerticalAlignment="Center">
+
+                        <TextBlock Text="标定日志"
+                                   Foreground="Black"
+                                   FontWeight="Bold"
+                                   FontSize="15"
+                                   VerticalAlignment="Center"/>
+
+                    </StackPanel>
+
+
+                    <!--<Button x:Name="BtnClearCalibrationLog"
+                            Content="清空日志"
+                            DockPanel.Dock="Right"
+                            Width="90"
+                            Height="26"
+                            Style="{StaticResource RoundButtonStyle}"
+                            Click="BtnClearCalibrationLog_Click"/>-->
+                </DockPanel>
+
+
+                <Border Grid.Row="2"
+                        Background="#0F172A"
+                        BorderBrush="#1E293B"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        Padding="8">
+
+                    <TextBox x:Name="TxtCalibrationLog"
+                             Background="Transparent"
+                             Foreground="#D1D5DB"
+                             BorderThickness="0"
+                             FontFamily="Consolas"
+                             FontSize="13"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             IsReadOnly="True"/>
+                </Border>
+            </Grid>
+        </Border>
+
+    </Grid>
+</Window>

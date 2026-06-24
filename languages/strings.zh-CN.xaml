@@ -1,0 +1,47 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="App_Title">机器人控制系统</sys:String>
+
+    <sys:String x:Key="Lang_Chinese">中文</sys:String>
+    <sys:String x:Key="Lang_English">English</sys:String>
+    <sys:String x:Key="Lang_Select">语言</sys:String>
+
+    <sys:String x:Key="Tab_MasterControl">主从控制</sys:String>
+    <sys:String x:Key="Tab_Simulation">仿真</sys:String>
+    <sys:String x:Key="Tab_Status">状态监测</sys:String>
+    <sys:String x:Key="Tab_Calibration">标定</sys:String>
+    <sys:String x:Key="Tab_Trajectory">轨迹规划</sys:String>
+    <sys:String x:Key="Tab_AIControl">AI自动控制</sys:String>
+
+    <sys:String x:Key="Btn_Connect">连接</sys:String>
+    <sys:String x:Key="Btn_Disconnect">断开</sys:String>
+    <sys:String x:Key="Btn_Initialize">初始化</sys:String>
+    <sys:String x:Key="Btn_Zero">回零</sys:String>
+    <sys:String x:Key="Btn_Home">Home</sys:String>
+    <sys:String x:Key="Btn_Stop">停止</sys:String>
+
+    <sys:String x:Key="State_Connected">已连接</sys:String>
+    <sys:String x:Key="State_Disconnected">未连接</sys:String>
+    <sys:String x:Key="State_Unknown">未知</sys:String>
+    <sys:String x:Key="State_Normal">正常</sys:String>
+    <sys:String x:Key="State_Running">运行中</sys:String>
+    <sys:String x:Key="State_Idle">空闲</sys:String>
+
+    <sys:String x:Key="Group_JointControl">关节控制</sys:String>
+    <sys:String x:Key="Group_IKControlTcp">逆运动学控制（TCP位姿）</sys:String>
+    <sys:String x:Key="Group_ToolRcm">工具参数 / RCM设置</sys:String>
+    <sys:String x:Key="Group_Log">运行日志</sys:String>
+
+    <sys:String x:Key="Label_RobotIP">机器人IP</sys:String>
+    <sys:String x:Key="Label_ConnectionState">连接状态</sys:String>
+    <sys:String x:Key="Label_RobotState">机器人状态</sys:String>
+    <sys:String x:Key="Label_TcpSpeed">TCP速度</sys:String>
+    <sys:String x:Key="Label_TcpAcceleration">TCP加速度</sys:String>
+
+    <sys:String x:Key="Msg_ToolParamError">工具参数输入格式错误，请检查 Tool_X / Tool_Y / Tool_Z 是否都是有效数字。</sys:String>
+    <sys:String x:Key="Title_ToolParamError">工具参数错误</sys:String>
+
+</ResourceDictionary>

@@ -1,0 +1,47 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+  <sys:String x:Key="App_Title">Robot Control System</sys:String>
+
+  <sys:String x:Key="Lang_Chinese">中文</sys:String>
+  <sys:String x:Key="Lang_English">English</sys:String>
+  <sys:String x:Key="Lang_Select">Language</sys:String>
+
+  <sys:String x:Key="Tab_MasterControl">Master-Slave Control</sys:String>
+  <sys:String x:Key="Tab_Simulation">Simulation</sys:String>
+  <sys:String x:Key="Tab_Status">Status Monitor</sys:String>
+  <sys:String x:Key="Tab_Calibration">Calibration</sys:String>
+  <sys:String x:Key="Tab_Trajectory">Trajectory Planning</sys:String>
+  <sys:String x:Key="Tab_AIControl">AI Control</sys:String>
+
+  <sys:String x:Key="Btn_Connect">Connect</sys:String>
+  <sys:String x:Key="Btn_Disconnect">Disconnect</sys:String>
+  <sys:String x:Key="Btn_Initialize">Initialize</sys:String>
+  <sys:String x:Key="Btn_Zero">Zero</sys:String>
+  <sys:String x:Key="Btn_Home">Home</sys:String>
+  <sys:String x:Key="Btn_Stop">Stop</sys:String>
+
+  <sys:String x:Key="State_Connected">Connected</sys:String>
+  <sys:String x:Key="State_Disconnected">Disconnected</sys:String>
+  <sys:String x:Key="State_Unknown">Unknown</sys:String>
+  <sys:String x:Key="State_Normal">Normal</sys:String>
+  <sys:String x:Key="State_Running">Running</sys:String>
+  <sys:String x:Key="State_Idle">Idle</sys:String>
+
+  <sys:String x:Key="Group_JointControl">Joint Control</sys:String>
+  <sys:String x:Key="Group_IKControlTcp">Inverse Kinematics Control (TCP Pose)</sys:String>
+  <sys:String x:Key="Group_ToolRcm">Tool Parameters / RCM Settings</sys:String>
+  <sys:String x:Key="Group_Log">Runtime Log</sys:String>
+
+  <sys:String x:Key="Label_RobotIP">Robot IP</sys:String>
+  <sys:String x:Key="Label_ConnectionState">Connection State</sys:String>
+  <sys:String x:Key="Label_RobotState">Robot State</sys:String>
+  <sys:String x:Key="Label_TcpSpeed">TCP Speed</sys:String>
+  <sys:String x:Key="Label_TcpAcceleration">TCP Acceleration</sys:String>
+
+  <sys:String x:Key="Msg_ToolParamError">Invalid tool parameter format. Please check whether Tool_X / Tool_Y / Tool_Z are valid numbers.</sys:String>
+  <sys:String x:Key="Title_ToolParamError">Tool Parameter Error</sys:String>
+
+</ResourceDictionary>

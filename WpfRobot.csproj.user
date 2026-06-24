@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="calibrationWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="calibration\endoCali.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="calibration\endoHandEye.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="calibration\motor7Cali.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="calibration\ndiRobotHandEye.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="robParameter.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>
