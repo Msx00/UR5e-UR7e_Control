@@ -18,4 +18,4 @@ The studio is easy to interact with python and C++ codes.
 
 
 
-It is recommended to run on Windows X64 platform.
+It is recommended to run on Windows X64 platform/configuration.
