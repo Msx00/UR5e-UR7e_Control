@@ -14,3 +14,8 @@ Because of file-size limitaion, Shixing (me) did not upload .dll files.
 
 
 The studio is easy to interact with python and C++ codes.
+
+
+
+
+It is recommended to run on Windows X64 platform.
