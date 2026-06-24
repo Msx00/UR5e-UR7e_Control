@@ -1,0 +1,545 @@
+﻿    <UserControl x:Class="WpfRobot.calibration.endoHandEye"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:WpfRobot.calibration"
+             mc:Ignorable="d"
+             d:DesignHeight="820"
+             d:DesignWidth="1250"
+             Background="White">
+        <UserControl.Resources>
+
+        <!-- 圆角按钮 -->
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="MinWidth" Value="88"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EFF6FF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#60A5FA"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#DBEAFE"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#2563EB"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#94A3B8"/>
+                                <Setter TargetName="border" Property="Background" Value="#F1F5F9"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#E2E8F0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 主按钮 -->
+        <Style x:Key="PrimaryButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource RoundButtonStyle}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="BorderBrush" Value="#2563EB"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1D4ED8"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#1D4ED8"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#1E40AF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#1E40AF"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#CBD5E1"/>
+                                <Setter TargetName="border" Property="Background" Value="#94A3B8"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#94A3B8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- 危险按钮 -->
+        <Style x:Key="DangerButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource RoundButtonStyle}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#DC2626"/>
+            <Setter Property="BorderBrush" Value="#DC2626"/>
+        </Style>
+
+        <Style x:Key="CardTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="HintTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <Style x:Key="ValueTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="Margin" Value="0,2,0,2"/>
+        </Style>
+
+    </UserControl.Resources>
+
+
+    <Grid Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="74"/>
+            <RowDefinition Height="*"/>
+            <!--<RowDefinition Height="185"/>-->
+        </Grid.RowDefinitions>
+
+
+        <!-- 顶部标题栏 -->
+        <Border Grid.Row="0"
+                Background="White"
+                CornerRadius="14"
+                BorderBrush="#D8E0EA"
+                BorderThickness="1"
+                Padding="16,8">
+
+            <DockPanel LastChildFill="True">
+
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center">
+
+                    <TextBlock Text="内窥镜-机械臂手眼标定"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="#0F172A"/>
+
+                    <TextBlock Text="需要准确的T07才行。采集机器人位姿与内窥镜观测标定板位姿，求解相机相对于机械臂末端 / 第七轴的安装关系"
+                               FontSize="13"
+                               Foreground="#64748B"
+                               Margin="0,3,0,0"/>
+                </StackPanel>
+
+
+                <StackPanel DockPanel.Dock="Right"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+
+                    <TextBlock Text="样本数量："
+                               VerticalAlignment="Center"
+                               Foreground="#475569"
+                               FontSize="13"
+                               Margin="0,0,4,0"/>
+
+                    <TextBlock x:Name="TxtSampleCount"
+                               Text="0"
+                               VerticalAlignment="Center"
+                               Foreground="#2563EB"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Margin="0,0,14,0"/>
+
+                    <Button x:Name="BtnOpenCamera"
+                            Content="打开相机"
+                            Width="92"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Click="BtnOpenCamera_Click"/>
+
+                    <Button x:Name="BtnStopCamera"
+                            Content="停止预览"
+                            Width="92"
+                            Style="{StaticResource RoundButtonStyle}"
+                            Click="BtnStopCamera_Click"/>
+
+                </StackPanel>
+
+            </DockPanel>
+        </Border>
+
+
+        <!-- 中间主体 -->
+        <Grid Grid.Row="1"
+              Margin="0,10,0,10">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.15*"/>
+                <ColumnDefinition Width="0.85*"/>
+                <ColumnDefinition Width="1.05*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- 左侧：实时内窥镜画面 -->
+            <Border Grid.Column="0"
+                    Background="White"
+                    CornerRadius="14"
+                    BorderBrush="#D8E0EA"
+                    BorderThickness="1"
+                    Padding="12"
+                    Margin="0,0,10,0">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0"
+                               Margin="0,0,0,10">
+
+                        <TextBlock Text="实时内窥镜画面"
+                                   Style="{StaticResource CardTitleStyle}"
+                                   DockPanel.Dock="Left"/>
+
+                        <TextBlock x:Name="TxtCameraStatus"
+                                   Text="相机未打开"
+                                   DockPanel.Dock="Right"
+                                   FontSize="13"
+                                   Foreground="#64748B"
+                                   HorizontalAlignment="Right"/>
+                    </DockPanel>
+
+
+                    <Border Grid.Row="1"
+                            Background="#020617"
+                            CornerRadius="12"
+                            BorderBrush="#1E293B"
+                            BorderThickness="1">
+
+                        <Grid>
+
+                            <Image x:Name="ImgLive"
+                                   Stretch="Uniform"
+                                   SnapsToDevicePixels="True"/>
+
+                            <TextBlock x:Name="TxtLivePlaceholder"
+                                       Text="等待内窥镜实时画面..."
+                                       Foreground="#94A3B8"
+                                       FontSize="18"
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+
+
+                    <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,12,0,0">
+
+                        <Button x:Name="BtnDetectBoard"
+                                Content="检测标定板"
+                                Width="110"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="BtnDetectBoard_Click"/>
+
+                        <Button x:Name="BtnCaptureImage"
+                                Content="保存当前图"
+                                Width="110"
+                                Style="{StaticResource RoundButtonStyle}"
+                                Click="BtnCaptureImage_Click"/>
+
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+
+            <!-- 中间：当前位姿 -->
+            <Border Grid.Column="1"
+                    Background="White"
+                    CornerRadius="14"
+                    BorderBrush="#D8E0EA"
+                    BorderThickness="1"
+                    Padding="12"
+                    Margin="0,0,10,0">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+
+                    <TextBlock Grid.Row="0"
+                               Text="当前采集状态"
+                               Style="{StaticResource CardTitleStyle}"/>
+
+
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+
+                        <StackPanel>
+
+                            <!-- 机器人位姿 -->
+                            <Border Background="#F8FAFC"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="12"
+                                    Margin="0,0,0,10">
+
+                                <StackPanel>
+                                    <TextBlock Text="机器人当前位姿"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="#0F172A"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBlock Text="用于保存 T_base_tool / T_base_7 / T_base_tcp"
+                                               Style="{StaticResource HintTextStyle}"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBlock x:Name="TxtRobotPose"
+                                               Text="尚未读取机器人位姿"
+                                               Style="{StaticResource ValueTextStyle}"/>
+
+                                    <Button x:Name="BtnReadRobotPose"
+                                            Content="读取机器人位姿"
+                                            Width="120"
+                                            HorizontalAlignment="Left"
+                                            Margin="0,10,0,0"
+                                            Style="{StaticResource RoundButtonStyle}"
+                                            Click="BtnReadRobotPose_Click"/>
+                                </StackPanel>
+                            </Border>
+
+
+                            <!-- 标定板位姿 -->
+                            <Border Background="#EFF6FF"
+                                    BorderBrush="#93C5FD"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="12"
+                                    Margin="0,0,0,10">
+
+                                <StackPanel>
+                                    <TextBlock Text="内窥镜观测位姿"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="#1E40AF"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBlock Text="用于保存 T_camera_board，由标定板检测得到"
+                                               Style="{StaticResource HintTextStyle}"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBlock x:Name="TxtBoardPose"
+                                               Text="尚未检测标定板位姿"
+                                               Style="{StaticResource ValueTextStyle}"/>
+
+                                    <TextBlock x:Name="TxtBoardDetectStatus"
+                                               Text="检测状态：未检测"
+                                               Foreground="#64748B"
+                                               FontSize="13"
+                                               TextWrapping="Wrap"
+                                               Margin="0,10,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+
+                            <!-- 采集提示 -->
+                            <Border Background="#FFF7ED"
+                                    BorderBrush="#FDBA74"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="12">
+
+                                <StackPanel>
+                                    <TextBlock Text="采集建议"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="#9A3412"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBlock Text="建议采集 10～20 组不同机器人姿态。姿态变化应包含平移和旋转，避免所有样本集中在同一小范围内。"
+                                               FontSize="13"
+                                               Foreground="#7C2D12"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+
+                    <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,12,0,0">
+
+                        <Button x:Name="BtnCapturePair"
+                                Content="采集一组"
+                                Width="100"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="BtnCapturePair_Click"/>
+
+                        <Button x:Name="BtnClearCurrent"
+                                Content="清空当前"
+                                Width="100"
+                                Style="{StaticResource RoundButtonStyle}"
+                                Click="BtnClearCurrent_Click"/>
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+
+            <!-- 右侧：样本列表 -->
+            <Border Grid.Column="2"
+                    Background="White"
+                    CornerRadius="14"
+                    BorderBrush="#D8E0EA"
+                    BorderThickness="1"
+                    Padding="12">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+
+                    <DockPanel Grid.Row="0"
+                               Margin="0,0,0,8">
+
+                        <TextBlock Text="手眼标定样本列表"
+                                   Style="{StaticResource CardTitleStyle}"
+                                   DockPanel.Dock="Left"/>
+
+                        <TextBlock x:Name="TxtSelectedSample"
+                                   Text="未选择"
+                                   DockPanel.Dock="Right"
+                                   Foreground="#64748B"
+                                   FontSize="13"/>
+                    </DockPanel>
+
+
+                    <DataGrid x:Name="SampleDataGrid"
+                              Grid.Row="1"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="False"
+                              CanUserDeleteRows="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              Background="#F8FAFC"
+                              BorderBrush="#E2E8F0"
+                              BorderThickness="1"
+                              SelectionChanged="SampleDataGrid_SelectionChanged">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="序号"
+                                                Binding="{Binding Index}"
+                                                Width="48"/>
+
+                            <DataGridTextColumn Header="时间"
+                                                Binding="{Binding CaptureTime}"
+                                                Width="90"/>
+
+                            <DataGridTextColumn Header="机器人位姿"
+                                                Binding="{Binding RobotPoseText}"
+                                                Width="*"/>
+
+                            <DataGridTextColumn Header="标定板位姿"
+                                                Binding="{Binding BoardPoseText}"
+                                                Width="*"/>
+
+                            <DataGridTextColumn Header="状态"
+                                                Binding="{Binding StateText}"
+                                                Width="70"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+                    <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,10,0,0">
+
+                        <Button x:Name="BtnDeleteSample"
+                                Content="删除样本"
+                                Width="90"
+                                Style="{StaticResource RoundButtonStyle}"
+                                Click="BtnDeleteSample_Click"/>
+
+                        <Button x:Name="BtnClearSamples"
+                                Content="清空样本"
+                                Width="90"
+                                Style="{StaticResource DangerButtonStyle}"
+                                Click="BtnClearSamples_Click"/>
+
+                        <Button x:Name="BtnSolveHandEye"
+                                    Content="执行求解"
+                                    Width="96"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Click="BtnSolveHandEye_Click"/>
+
+                        <Button x:Name="BtnSaveHandEye"
+                                    Content="保存结果"
+                                    Width="96"
+                                    Style="{StaticResource RoundButtonStyle}"
+                                    Click="BtnSaveHandEye_Click"/>
+                        
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+        </Grid>
+
+    </Grid>
+</UserControl>

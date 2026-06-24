@@ -1,0 +1,806 @@
+﻿<UserControl x:Class="WpfRobot.calibration.ndiRobotHandEye"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:WpfRobot.calibration"
+             mc:Ignorable="d"
+             d:DesignHeight="820"
+             d:DesignWidth="1250"
+             Background="White">
+    <UserControl.Resources>
+        
+        <Style x:Key="RoundButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="MinWidth" Value="88"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="Background" Value="#FFFFFF"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EFF6FF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#60A5FA"/>
+                            </Trigger>
+
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#DBEAFE"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#2563EB"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="#94A3B8"/>
+                                <Setter TargetName="border" Property="Background" Value="#F1F5F9"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#E2E8F0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource RoundButtonStyle}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="BorderBrush" Value="#2563EB"/>
+        </Style>
+
+        <Style x:Key="DangerButtonStyle"
+               TargetType="Button"
+               BasedOn="{StaticResource RoundButtonStyle}">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#DC2626"/>
+            <Setter Property="BorderBrush" Value="#DC2626"/>
+        </Style>
+
+        <Style x:Key="CardTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="HintTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#64748B"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+    </UserControl.Resources>
+
+
+    <Grid Margin="10">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="74"/>
+            <RowDefinition Height="*"/>
+            <!--<RowDefinition Height="190"/>-->
+        </Grid.RowDefinitions>
+
+
+        <!-- 顶部标题栏 -->
+        <Border Grid.Row="0"
+                Background="White"
+                CornerRadius="14"
+                BorderBrush="#D8E0EA"
+                BorderThickness="1"
+                Padding="16,8">
+
+            <DockPanel LastChildFill="True">
+
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Center">
+
+                    <TextBlock Text="NDI-机械臂手眼标定"
+                               FontSize="22"
+                               FontWeight="Bold"
+                               Foreground="#0F172A"/>
+
+
+                    <!--<TextBlock Text="采集机器人位姿与 NDI tracker 追踪到的 marker 位姿，求解 NDI 坐标系与机器人基坐标系之间的变换关系"
+                               FontSize="13"
+                               Foreground="#64748B"
+                               Margin="0,3,0,0"/>-->
+                </StackPanel>
+
+
+                <!-- 采集提示 -->
+                <Border Grid.Row="1"
+                            Background="#FFF7ED"
+                            BorderBrush="#FDBA74"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="10"
+                            Margin="15,6,10,6" Width="450">
+
+                    <TextBlock Text="采集建议：移动机械臂到不同姿态，每次同时读取机器人位姿和 NDI 39 位姿，然后点击“采集一组”。建议至少 10～20 组。"
+                                   FontSize="8"
+                                   Foreground="#7C2D12"
+                                   TextWrapping="Wrap"/>
+                </Border>
+
+                <StackPanel DockPanel.Dock="Right"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+
+                    <TextBlock Text="样本数量："
+                               VerticalAlignment="Center"
+                               Foreground="#475569"
+                               FontSize="13"
+                               Margin="0,0,4,0"/>
+
+                    <TextBlock x:Name="TxtSampleCount"
+                               Text="0"
+                               VerticalAlignment="Center"
+                               Foreground="#2563EB"
+                               FontSize="18"
+                               FontWeight="Bold"
+                               Margin="0,0,14,0"/>
+
+                    <Button x:Name="BtnConnectRobot"
+                            Content="连接机器人"
+                            Width="96"
+                            Style="{StaticResource RoundButtonStyle}"
+                            Click="BtnConnectRobot_Click"/>
+
+                    <Button x:Name="BtnConnectNdi"
+                            Content="连接 NDI"
+                            Width="96"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Click="BtnConnectNdi_Click"/>
+
+                </StackPanel>
+
+            </DockPanel>
+        </Border>
+
+
+        <!-- 中间主体区域 -->
+        <Grid Grid.Row="1"
+              Margin="0,10,0,10">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.95*"/>
+                <ColumnDefinition Width="0.95*"/>
+                <ColumnDefinition Width="1.15*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- 左侧：机器人当前位姿 -->
+            <Border Grid.Column="0"
+                    Background="White"
+                    CornerRadius="14"
+                    BorderBrush="#D8E0EA"
+                    BorderThickness="1"
+                    Padding="12"
+                    Margin="0,0,10,0">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel Grid.Row="0"
+                               Margin="0,0,0,10">
+
+                        <TextBlock Text="机器人当前状态"
+                                   Style="{StaticResource CardTitleStyle}"
+                                   DockPanel.Dock="Left"/>
+
+                        <TextBlock x:Name="TxtRobotStatus"
+                                   Text="未连接"
+                                   DockPanel.Dock="Right"
+                                   Foreground="#64748B"
+                                   FontSize="13"/>
+                    </DockPanel>
+
+
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+
+                        <StackPanel>
+
+                            <Border Background="#F8FAFC"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="12"
+                                    Margin="0,0,0,10">
+
+                                <StackPanel>
+
+                                    <TextBlock Text="机器人关节角"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="#0F172A"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBox x:Name="TxtRobotJoint"
+                                             Text="q1=--, q2=--, q3=--, q4=--, q5=--, q6=--, q7=--"
+                                             Background="White"
+                                             BorderBrush="#CBD5E1"
+                                             BorderThickness="1"
+                                             FontFamily="Consolas"
+                                             FontSize="13"
+                                             IsReadOnly="True"
+                                             TextWrapping="Wrap"
+                                             MinHeight="56"/>
+                                </StackPanel>
+                            </Border>
+
+
+                            <Border Background="#F8FAFC"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="12">
+
+                                <StackPanel>
+
+                                    <TextBlock Text="机器人位姿矩阵"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="#0F172A"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBlock Text="建议保存 T_base_tool、或 T_base_6"
+                                               Style="{StaticResource HintTextStyle}"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBox x:Name="TxtRobotPose"
+                                             Text="尚未读取机器人位姿"
+                                             Background="White"
+                                             BorderBrush="#CBD5E1"
+                                             BorderThickness="1"
+                                             FontFamily="Consolas"
+                                             FontSize="13"
+                                             IsReadOnly="True"
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="True"
+                                             MinHeight="190"
+                                             VerticalScrollBarVisibility="Auto"/>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+
+                    <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,12,0,0">
+
+                        <Button x:Name="BtnReadRobotPose"
+                                Content="读取机器人位姿"
+                                Width="120"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="BtnReadRobotPose_Click"/>
+
+                        <Button x:Name="BtnClearRobotPose"
+                                Content="清空"
+                                Width="80"
+                                Style="{StaticResource RoundButtonStyle}"
+                                Click="BtnClearRobotPose_Click"/>
+
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+
+            <!-- 中间：NDI 当前 tracker 数据 -->
+            <Border Grid.Column="1"
+                    Background="White"
+                    CornerRadius="14"
+                    BorderBrush="#D8E0EA"
+                    BorderThickness="1"
+                    Padding="12"
+                    Margin="0,0,10,0">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+
+                    <DockPanel Grid.Row="0"
+                               Margin="0,0,0,10">
+
+                        <TextBlock Text="NDI Tracker 当前状态"
+                                   Style="{StaticResource CardTitleStyle}"
+                                   DockPanel.Dock="Left"/>
+
+                        <TextBlock x:Name="TxtNdiStatus"
+                                   Text="未连接"
+                                   DockPanel.Dock="Right"
+                                   Foreground="#64748B"
+                                   FontSize="13"/>
+                    </DockPanel>
+
+
+                    <ScrollViewer Grid.Row="1"
+                                  VerticalScrollBarVisibility="Auto">
+
+                        <StackPanel>
+
+                            <Border Background="#EFF6FF"
+                                    BorderBrush="#93C5FD"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="12"
+                                    Margin="0,0,0,10">
+
+                                <StackPanel>
+
+                                    <TextBlock Text="当前 Marker 信息"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="#1E40AF"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBlock Text="NDI 输出 m39 在 NDI 坐标系下的位姿"
+                                               Style="{StaticResource HintTextStyle}"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBox x:Name="TxtNdiMarkerInfo"
+                                             Text="Marker ID=--&#x0a;Tracking State=--&#x0a;Error=--"
+                                             Background="White"
+                                             BorderBrush="#CBD5E1"
+                                             BorderThickness="1"
+                                             FontFamily="Consolas"
+                                             FontSize="13"
+                                             IsReadOnly="True"
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="True"
+                                             MinHeight="76"/>
+                                </StackPanel>
+                            </Border>
+
+
+                            <Border Background="#F8FAFC"
+                                    BorderBrush="#E2E8F0"
+                                    BorderThickness="1"
+                                    CornerRadius="12"
+                                    Padding="12">
+
+                                <StackPanel>
+
+                                    <TextBlock Text="NDI 位姿矩阵"
+                                               FontSize="15"
+                                               FontWeight="Bold"
+                                               Foreground="#0F172A"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBlock Text="建议保存 T_ndi_marker"
+                                               Style="{StaticResource HintTextStyle}"
+                                               Margin="0,0,0,8"/>
+
+                                    <TextBox x:Name="TxtNdiPose"
+                                             Text="尚未读取 NDI marker 位姿"
+                                             Background="White"
+                                             BorderBrush="#CBD5E1"
+                                             BorderThickness="1"
+                                             FontFamily="Consolas"
+                                             FontSize="13"
+                                             IsReadOnly="True"
+                                             TextWrapping="Wrap"
+                                             AcceptsReturn="True"
+                                             MinHeight="190"
+                                             VerticalScrollBarVisibility="Auto"/>
+                                </StackPanel>
+                            </Border>
+
+                        </StackPanel>
+                    </ScrollViewer>
+
+
+                    <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,12,0,0">
+
+                        <Button x:Name="BtnReadNdiPose"
+                                Content="读取 NDI 位姿"
+                                Width="120"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Click="BtnReadNdiPose_Click"/>
+
+                        <Button x:Name="BtnClearNdiPose"
+                                Content="清空"
+                                Width="80"
+                                Style="{StaticResource RoundButtonStyle}"
+                                Click="BtnClearNdiPose_Click"/>
+
+                    </StackPanel>
+
+                </Grid>
+            </Border>
+
+
+            <!-- 右侧：样本 / 求解 / 日志 -->
+            <Border Grid.Column="2"
+        Background="White"
+        CornerRadius="14"
+        BorderBrush="#D8E0EA"
+        BorderThickness="1"
+        Padding="12">
+
+                <Grid>
+
+                    <Grid.RowDefinitions>
+                        <!-- 标题 -->
+                        <RowDefinition Height="Auto"/>
+
+                        <!-- 采集提示 -->
+                        <RowDefinition Height="Auto"/>
+
+                        <!-- 样本表格 -->
+                        <RowDefinition Height="2.2*"/>
+
+                        <!-- 样本按钮 -->
+                        <RowDefinition Height="Auto"/>
+
+                        <!-- 求解结果标题 -->
+                        <RowDefinition Height="Auto"/>
+
+                        <!-- 求解结果文本框 -->
+                        <RowDefinition Height="1.35*"/>
+
+                        <!-- 求解按钮 -->
+                        <RowDefinition Height="Auto"/>
+
+                        <!-- 日志标题 -->
+                        <!--<RowDefinition Height="Auto"/>-->
+
+                        <!-- 日志文本框 -->
+                        <!--<RowDefinition Height="1.15*"/>-->
+                    </Grid.RowDefinitions>
+
+
+                    <!-- 标题 -->
+                    <DockPanel Grid.Row="0"
+                   Margin="0,0,0,8">
+
+                        <TextBlock Text="标定样本 / 求解结果"
+                       Style="{StaticResource CardTitleStyle}"
+                       DockPanel.Dock="Left"/>
+
+                        <TextBlock x:Name="TxtSelectedSample"
+                       Text="未选择"
+                       DockPanel.Dock="Right"
+                       Foreground="#64748B"
+                       FontSize="13"/>
+                    </DockPanel>
+
+
+
+
+                    <!-- 样本列表 -->
+                    <DataGrid x:Name="SampleDataGrid"
+                  Grid.Row="2"
+                  AutoGenerateColumns="False"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  HeadersVisibility="Column"
+                  GridLinesVisibility="Horizontal"
+                  Background="#F8FAFC"
+                  BorderBrush="#E2E8F0"
+                  BorderThickness="1"
+                  SelectionChanged="SampleDataGrid_SelectionChanged"
+                  Margin="0,0,0,8">
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="序号"
+                                    Binding="{Binding Index}"
+                                    Width="45"/>
+
+                            <DataGridTextColumn Header="时间"
+                                    Binding="{Binding CaptureTime}"
+                                    Width="82"/>
+
+                            <DataGridTextColumn Header="机器人位姿"
+                                    Binding="{Binding RobotPoseShort}"
+                                    Width="*"/>
+
+                            <DataGridTextColumn Header="NDI 位姿"
+                                    Binding="{Binding NdiPoseShort}"
+                                    Width="*"/>
+
+                            <DataGridTextColumn Header="状态"
+                                    Binding="{Binding StateText}"
+                                    Width="58"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+                    <!-- 样本按钮 -->
+                    <StackPanel Grid.Row="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,10">
+
+                        <Button x:Name="BtnCapturePair"
+                    Content="采集一组"
+                    Width="90"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Click="BtnCapturePair_Click"/>
+
+                        <Button x:Name="BtnDeleteSample"
+                    Content="删除样本"
+                    Width="90"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="BtnDeleteSample_Click"/>
+
+                        <Button x:Name="BtnClearSamples"
+                    Content="清空样本"
+                    Width="90"
+                    Style="{StaticResource DangerButtonStyle}"
+                    Click="BtnClearSamples_Click"/>
+                    </StackPanel>
+
+
+                    <!-- 求解结果标题 -->
+                    <DockPanel Grid.Row="4"
+                   Margin="0,0,0,6">
+
+                        <TextBlock Text="NDI-机器人标定输出"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       Foreground="#0F172A"
+                       DockPanel.Dock="Left"/>
+
+                        <TextBlock Text="T_robot_ndi / 39ToRobot"
+                       FontSize="12"
+                       Foreground="#64748B"
+                       DockPanel.Dock="Right"/>
+                    </DockPanel>
+
+
+                    <!-- 求解结果 -->
+                    <TextBox x:Name="TxtCalibrationResult"
+                 Grid.Row="5"
+                 Background="#F8FAFC"
+                 Foreground="#334155"
+                 BorderBrush="#CBD5E1"
+                 BorderThickness="1"
+                 FontFamily="Consolas"
+                 FontSize="13"
+                 TextWrapping="Wrap"
+                 AcceptsReturn="True"
+                 IsReadOnly="True"
+                 VerticalScrollBarVisibility="Auto"
+                 HorizontalScrollBarVisibility="Auto"
+                 Text="尚未执行标定。&#x0a;输出内容：&#x0a;T_robot_ndi / 39ToRobot&#x0a;Euler XYZ&#x0a;样本数量&#x0a;保存路径"
+                 Margin="0,0,0,8"/>
+
+
+                    <!-- 求解按钮 -->
+                    <StackPanel Grid.Row="6"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,0,10">
+
+                        <Button x:Name="BtnSolveCalibration"
+                    Content="执行求解"
+                    Width="96"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Click="BtnSolveCalibration_Click"/>
+
+                        <Button x:Name="BtnSaveCalibration"
+                    Content="保存结果"
+                    Width="96"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="BtnSaveCalibration_Click"/>
+                    </StackPanel>
+
+
+                    <!-- 日志标题 --><!--
+                    <DockPanel Grid.Row="7"
+                   Margin="0,0,0,6">
+
+                        <TextBlock Text="标定日志"
+                       FontSize="15"
+                       FontWeight="Bold"
+                       Foreground="#0F172A"
+                       DockPanel.Dock="Left"/>
+
+                        <Button x:Name="BtnClearLog"
+                    Content="清空日志"
+                    Width="82"
+                    Height="26"
+                    FontSize="12"
+                    DockPanel.Dock="Right"
+                    Style="{StaticResource RoundButtonStyle}"
+                    Click="BtnClearLog_Click"/>
+                    </DockPanel>-->
+
+
+                    <!-- 日志 --><!--
+                    <Border Grid.Row="8"
+                            Background="#0F172A"
+                            BorderBrush="#1E293B"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            Padding="8">    
+
+                        <TextBox x:Name="TxtLog"
+                                 Background="Transparent"
+                                 Foreground="#D1D5DB"
+                                 BorderThickness="0"
+                                 FontFamily="Consolas"
+                                 FontSize="13"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 IsReadOnly="True"/>
+                    </Border>-->
+
+                </Grid>
+            </Border>
+
+        </Grid>
+
+
+        <!-- 底部：结果和日志 --><!--
+        <Border Grid.Row="2"
+                Background="White"
+                CornerRadius="14"
+                BorderBrush="#D8E0EA"
+                BorderThickness="1"
+                Padding="12">
+
+            <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="470"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+
+                --><!-- 求解结果 --><!--
+                <Border Grid.Column="0"
+                        Background="#F8FAFC"
+                        BorderBrush="#E2E8F0"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Padding="12"
+                        Margin="0,0,10,0">
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0"
+                                   Text="NDI-机器人标定输出"
+                                   FontSize="15"
+                                   FontWeight="Bold"
+                                   Foreground="#0F172A"
+                                   Margin="0,0,0,8"/>
+
+                        <TextBox x:Name="TxtCalibrationResult"
+                                 Grid.Row="1"
+                                 Background="White"
+                                 Foreground="#334155"
+                                 BorderBrush="#CBD5E1"
+                                 BorderThickness="1"
+                                 FontFamily="Consolas"
+                                 FontSize="13"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 IsReadOnly="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 Text="尚未执行标定。输出建议包括：&#x0a;T_base_ndi 或 T_ndi_base&#x0a;T_tool_marker 或 T_7_marker&#x0a;平均误差 / 最大误差"/>
+
+                        <StackPanel Grid.Row="2"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,8,0,0">
+
+                            <Button x:Name="BtnSolveCalibration"
+                                    Content="执行求解"
+                                    Width="96"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Click="BtnSolveCalibration_Click"/>
+
+                            <Button x:Name="BtnSaveCalibration"
+                                    Content="保存结果"
+                                    Width="96"
+                                    Style="{StaticResource RoundButtonStyle}"
+                                    Click="BtnSaveCalibration_Click"/>
+
+                        </StackPanel>
+
+                    </Grid>
+                </Border>
+
+
+                --><!-- 日志 --><!--
+                <Border Grid.Column="1"
+                        Background="#0F172A"
+                        BorderBrush="#1E293B"
+                        BorderThickness="1"
+                        CornerRadius="12"
+                        Padding="8">
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <DockPanel Grid.Row="0"
+                                   Margin="0,0,0,6">
+
+                            <TextBlock Text="标定日志"
+                                       Foreground="#E5E7EB"
+                                       FontSize="14"
+                                       FontWeight="Bold"
+                                       DockPanel.Dock="Left"/>
+
+                            <Button x:Name="BtnClearLog"
+                                    Content="清空日志"
+                                    DockPanel.Dock="Right"
+                                    Width="82"
+                                    Height="24"
+                                    FontSize="12"
+                                    Style="{StaticResource RoundButtonStyle}"
+                                    Click="BtnClearLog_Click"/>
+                        </DockPanel>
+
+                        <TextBox x:Name="TxtLog"
+                                 Grid.Row="1"
+                                 Background="Transparent"
+                                 Foreground="#D1D5DB"
+                                 BorderThickness="0"
+                                 FontFamily="Consolas"
+                                 FontSize="13"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto"
+                                 HorizontalScrollBarVisibility="Auto"
+                                 IsReadOnly="True"/>
+
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </Border>-->
+
+    </Grid>
+</UserControl>

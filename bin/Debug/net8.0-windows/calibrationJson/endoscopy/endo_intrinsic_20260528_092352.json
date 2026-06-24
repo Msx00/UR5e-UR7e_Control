@@ -1,0 +1,88 @@
+﻿{
+  "ImageWidth": 1280,
+  "ImageHeight": 720,
+  "PatternCols": 7,
+  "PatternRows": 7,
+  "SpacingMm": 2.5,
+  "TotalImageCount": 9,
+  "ValidImageCount": 9,
+  "Fx": 751.208819064349,
+  "Fy": 751.7321106920473,
+  "Cx": 681.9021608748391,
+  "Cy": 340.5966828874365,
+  "CameraMatrix": [
+    751.208819064349,
+    0,
+    681.9021608748391,
+    0,
+    751.7321106920473,
+    340.5966828874365,
+    0,
+    0,
+    1
+  ],
+  "DistCoeffs": [
+    0.07028167360577821,
+    -0.1140253897260391,
+    -0.0019642307219664428,
+    0.0019858310992955644,
+    0.006350638324212183
+  ],
+  "RmsReprojectionError": 0.16527271672859145,
+  "Images": [
+    {
+      "Index": 1,
+      "Detected": true,
+      "CornerCount": 49,
+      "Message": "\u5706\u70B9\u6807\u5B9A\u677F\u68C0\u6D4B\u6210\u529F"
+    },
+    {
+      "Index": 2,
+      "Detected": true,
+      "CornerCount": 49,
+      "Message": "\u5706\u70B9\u6807\u5B9A\u677F\u68C0\u6D4B\u6210\u529F"
+    },
+    {
+      "Index": 3,
+      "Detected": true,
+      "CornerCount": 49,
+      "Message": "\u5706\u70B9\u6807\u5B9A\u677F\u68C0\u6D4B\u6210\u529F"
+    },
+    {
+      "Index": 4,
+      "Detected": true,
+      "CornerCount": 49,
+      "Message": "\u5706\u70B9\u6807\u5B9A\u677F\u68C0\u6D4B\u6210\u529F"
+    },
+    {
+      "Index": 5,
+      "Detected": true,
+      "CornerCount": 49,
+      "Message": "\u5706\u70B9\u6807\u5B9A\u677F\u68C0\u6D4B\u6210\u529F"
+    },
+    {
+      "Index": 6,
+      "Detected": true,
+      "CornerCount": 49,
+      "Message": "\u5706\u70B9\u6807\u5B9A\u677F\u68C0\u6D4B\u6210\u529F"
+    },
+    {
+      "Index": 7,
+      "Detected": true,
+      "CornerCount": 49,
+      "Message": "\u5706\u70B9\u6807\u5B9A\u677F\u68C0\u6D4B\u6210\u529F"
+    },
+    {
+      "Index": 8,
+      "Detected": true,
+      "CornerCount": 49,
+      "Message": "\u5706\u70B9\u6807\u5B9A\u677F\u68C0\u6D4B\u6210\u529F"
+    },
+    {
+      "Index": 9,
+      "Detected": true,
+      "CornerCount": 49,
+      "Message": "\u5706\u70B9\u6807\u5B9A\u677F\u68C0\u6D4B\u6210\u529F"
+    }
+  ]
+}
