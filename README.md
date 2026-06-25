@@ -7,7 +7,7 @@
 
 
 
-**Please let me know if you meet any question, such as language, dll configuration,  email at: ma_sx@foxmail.com**
+**Please let me know if you meet any question, such as language, dll configuration,  email at: ma_sx@foxmail.com. I will be happy to hlep you.**
 
 Because of file-size limitaion, Shixing (me) did not upload .dll files. You can use NuGet to install. 
 
