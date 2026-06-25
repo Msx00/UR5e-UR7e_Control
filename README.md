@@ -18,4 +18,4 @@ The studio is easy to interact with python and C++ codes, and it supports comple
 
 
 
-It is recommended to run on Windows X64 platform. 
+It is developed by .NET 8.0 and run on Windows X64 platform. 
