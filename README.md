@@ -13,9 +13,9 @@ Because of file-size limitaion, Shixing (me) did not upload .dll files. You can 
 
 
 
-The studio is easy to interact with python and C++ codes.
+The studio is easy to interact with python and C++ codes, and it supports complete RTDE and Dashboard founction.
 
 
 
 
-It is recommended to run on Windows X64 platform. The studio supports complete RTDE and Dashboard founction.
+It is recommended to run on Windows X64 platform. 
